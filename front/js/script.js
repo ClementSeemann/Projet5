@@ -1,26 +1,34 @@
 fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
-    .then((data) => {
-        return addProducts(data)
-    })
- 
-function addProducts(donnees){
-    const id= donnees[0]._id
-    const imageUrl=donnees[0].imageUrl
-    const altTxt=donnees[0].altTxt
-    const name=donnees[0].name
-    const description=donnees[0].description
+    .then((data) => addProducts(data))
 
-    const image=makeImage(imageUrl, altTxt)
-    const anchor=makeAnchor(id)
-    const article =makeArticle()
-    const h3=makeH3(name)
-    const p=makeParagraph(description)
+function addProducts(kanaps){
+    // const _id=kanaps[0]._id
+    // const imageUrl=kanaps[0].imageUrl
+    // const altTxt=kanaps[0].altTxt
+    // const name=kanaps[0].name
+    // const description=kanaps[0].description
 
-    article.appendChild(image)
-    article.appendChild(h3)
-    article.appendChild(p)
-    appendChildren(anchor, article)  
+    kanaps.forEach(kanap => {
+        const {_id, imageUrl, altTxt, name, description}= kanap
+        const anchor=makeAnchor(_id)
+        const article =document.createElement("article")
+        const image=makeImage(imageUrl, altTxt)
+        const h3=makeH3(name)
+        const p=makeParagraph(description)
+
+        appendElementsToArticle(article, [image, h3, p])
+        appendArticleToAnchor(anchor, article)
+    })  
+}
+
+function appendElementsToArticle(article, array){
+    array.forEach((item) => {
+        article.appendChild(item)
+    });
+    // article.appendChild(image)
+    // article.appendChild(h3)
+    // article.appendChild(p)
 }
 
 function makeAnchor(id){
@@ -29,7 +37,7 @@ function makeAnchor(id){
     return anchor
 }
 
-function appendChildren(anchor, article){
+function appendArticleToAnchor(anchor, article){
     const items= document.querySelector("#items")
     if (items !=null) {
         items.appendChild(anchor)
@@ -41,12 +49,9 @@ function makeImage(imageUrl, altTxt){
     const image=document.createElement("img")
     image.src=imageUrl
     image.alt=altTxt
+    image.removeAttribute("title")
+    image.removeAttribute("style")
     return image
-}
-
-function makeArticle(){
-    const article =document.createElement("article")
-    return article
 }
 
 function makeH3(name){
