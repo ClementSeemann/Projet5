@@ -3,6 +3,7 @@ const urlParams = new URLSearchParams(queryString);
 const id = urlParams.get("id");
 if (id !=null){
     let itemPrice = 0;
+    let imgUrl, altText;
 };
 
 fetch(`http://localhost:3000/api/products/${id}`)
@@ -11,6 +12,8 @@ fetch(`http://localhost:3000/api/products/${id}`)
 
 function handleData(kanap){
     const {altTxt, colors, description, imageUrl, name, price} = kanap;
+    imgUrl = imageUrl;
+    altText = altTxt;
     itemPrice = price;
     makeImage(imageUrl, altTxt);
     makeTitle(name);
@@ -55,20 +58,35 @@ function makeColors(colors){
 };
 
 const button = document.querySelector("#addToCart");
-if (button !=null) {
-    button.addEventListener("click", (e) => {
-        const color = document.querySelector("#colors").value;
-        const quantity = document.querySelector("#quantity").value;
-        if (color == null || color === "" || quantity == null || quantity == 0){
-            alert("Veuillez sélectionner une couleur et une quantité.");
-        };
-        const data = {
-            id: id,
-            color: color,
-            quantity: Number(quantity),
-            price: itemPrice
-        };
-        localStorage.setItem(id, JSON.stringify(data));
-        window.location.href = "cart.html";
-    });
+button.addEventListener("click", handleClick);
+
+function handleClick(){
+    const color = document.querySelector("#colors").value;
+    const quantity = document.querySelector("#quantity").value;
+    if (isOrderInvalid(color, quantity)) return;
+    saveOrder(color, quantity);
+    redirectToCart();
+};
+
+function saveOrder(color, quantity){
+    const data = {
+        id: id,
+        color: color,
+        quantity: Number(quantity),
+        price: itemPrice,
+        imageUrl: imgUrl,
+        altTxt: altText,
+    };
+    localStorage.setItem(id, JSON.stringify(data));
+};
+
+function isOrderInvalid(color, quantity){
+    if (color == null || color === "" || quantity == null || quantity == 0){
+        alert("Veuillez sélectionner une couleur et une quantité.");
+        return true;
+    };
+};
+
+function redirectToCart(){
+    window.location.href = "cart.html";
 };

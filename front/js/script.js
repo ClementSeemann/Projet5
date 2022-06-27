@@ -3,12 +3,6 @@ fetch("http://localhost:3000/api/products")
     .then((kanaps) => addProducts(kanaps))
 
 function addProducts(kanaps){
-    // const _id=kanaps[0]._id
-    // const imageUrl=kanaps[0].imageUrl
-    // const altTxt=kanaps[0].altTxt
-    // const name=kanaps[0].name
-    // const description=kanaps[0].description
-
     kanaps.forEach(kanap => {
         const {_id, imageUrl, altTxt, name, description} = kanap;
         const anchor = makeAnchor(_id);
@@ -19,16 +13,13 @@ function addProducts(kanaps){
 
         appendElementsToArticle(article, [image, h3, p]);
         appendArticleToAnchor(anchor, article);
-    })  
+    });
 };
 
 function appendElementsToArticle(article, array){
     array.forEach((item) => {
         article.appendChild(item);
-    })
-    // article.appendChild(image)
-    // article.appendChild(h3)
-    // article.appendChild(p)
+    });
 };
 
 function makeAnchor(id){
@@ -42,7 +33,7 @@ function appendArticleToAnchor(anchor, article){
     if (items !=null) {
         items.appendChild(anchor);
         anchor.appendChild(article);
-    }  
+    };  
 };
 
 function makeImage(imageUrl, altTxt){
