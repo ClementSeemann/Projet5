@@ -19,6 +19,7 @@ function displayItem(item){
     const cardItemContent = makeCartContent(item);
     article.appendChild(cardItemContent);
     displayArticle(article);
+    displayTotalQuantity(item);
 };
 
 function makeCartContent(item){
@@ -54,6 +55,7 @@ function makeSettings(item){
     settings.classList.add("cart__item__content__settings");
 
     addQuantityToSettings(settings, item);
+    addDeleteToSettings(settings, item);
     return settings;
 };
 
@@ -92,5 +94,20 @@ function addQuantityToSettings(settings, item){
     input.min = "1";
     input.max = "100";
     input.value = item.quantity;
-    settings.appendChild(input);
+    quantity.appendChild(input);
+    settings.appendChild(quantity);
+};
+
+function addDeleteToSettings(settings){
+    const div = document.createElement("div");
+    div.classList.add("cart__item__content__settings__delete");
+    const p = document.createElement("p");
+    p.textContent = "Supprimer";
+    div.appendChild(p);
+    settings.appendChild(div);
+};
+
+function displayTotalQuantity(item){
+    const totalQuantity = document.querySelector("#totalQuantity");
+    totalQuantity.textContent = item.quantity;
 };
