@@ -19,7 +19,8 @@ function displayItem(item){
     const cardItemContent = makeCartContent(item);
     article.appendChild(cardItemContent);
     displayArticle(article);
-    displayTotalQuantity(item);
+    displayTotalPrice();
+    displayTotalQuantity();
 };
 
 function makeCartContent(item){
@@ -94,6 +95,8 @@ function addQuantityToSettings(settings, item){
     input.min = "1";
     input.max = "100";
     input.value = item.quantity;
+    input.addEventListener("input", () => updatePriceQuantity(item.id, input.value, item));
+
     quantity.appendChild(input);
     settings.appendChild(quantity);
 };
@@ -107,7 +110,27 @@ function addDeleteToSettings(settings){
     settings.appendChild(div);
 };
 
-function displayTotalQuantity(item){
+function displayTotalPrice(){
+    const totalPrice = document.querySelector("#totalPrice");
+    const total = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    totalPrice.textContent = total;
+};
+
+function displayTotalQuantity(){
     const totalQuantity = document.querySelector("#totalQuantity");
-    totalQuantity.textContent = item.quantity;
+    const total = cart.reduce((total, item) => total + item.quantity, 0);
+    totalQuantity.textContent = total;
+};
+
+function updatePriceQuantity(id, newValue, item){
+    const itemUpdate = cart.find(item => item.id === id);
+    itemUpdate.quantity = Number(newValue);
+    displayTotalQuantity();
+    displayTotalPrice();
+    saveNewDataToCache(item)
+};
+
+function saveNewDataToCache(item){
+    const dataToSave = JSON.stringify(item);
+    localStorage.setItem(item.id, dataToSave);
 };
