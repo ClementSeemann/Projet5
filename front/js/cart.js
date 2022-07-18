@@ -1,18 +1,32 @@
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const id = urlParams.get("id");
+if (id !=null){
+    let itemPrice = 0;
+    let imgUrl, altText, articleName;
+};
+
 const cart = [];
+retrieveItemsFromStorage();
 
-retrieveItemsFromCache();
-cart.forEach((item) => displayItem(item));
-
-function retrieveItemsFromCache(){
+function retrieveItemsFromStorage(){
     const numberOfItems = localStorage.length;
     for (let i = 0; i< numberOfItems; i++){
         const item = localStorage.getItem(localStorage.key(i)) || "";
         const itemObject = JSON.parse(item);
-        cart.push(itemObject);
+        displayItem(item);
+        return;
     };
 };
 
+
 function displayItem(item){
+    fetch(`http://localhost:3000/api/products/${id}`)
+    .then((response) => response.json())
+    .then((res) => makeCartContent(res))
+    
+    
+
     const article = makeArticle(item);
     const imageDiv = makeImageDiv(item);
     article.appendChild(imageDiv);
@@ -22,6 +36,7 @@ function displayItem(item){
     displayTotalPrice();
     displayTotalQuantity();
 };
+
 
 function makeCartContent(item){
     const cardItemContent = document.createElement("div");
@@ -79,6 +94,7 @@ function makeImageDiv(item){
     image.src = item.imageUrl;
     image.alt = item.altTxt;
     div.appendChild(image);
+    console.log(item);
     return div;
 };
 
