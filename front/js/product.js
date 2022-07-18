@@ -75,10 +75,6 @@ function saveOrder(color, quantity){
         id: id,
         color: color,
         quantity: Number(quantity),
-        price: itemPrice,
-        imageUrl: imgUrl,
-        altTxt: altText,
-        name: articleName,
     };
     localStorage.setItem(key, JSON.stringify(data));
 };
